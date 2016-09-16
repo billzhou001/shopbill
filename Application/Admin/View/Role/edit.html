@@ -1,0 +1,70 @@
+<layout name="layout" />
+<div class="main-div">
+    <form name="main_form" method="POST" action="__SELF__" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="<?=$roleData['id']?>" />
+        <table cellspacing="1" cellpadding="3" width="100%">
+            <tr>
+                <td class="label">角色名称：</td>
+                <td>
+                    <input  type="text" name="role_name" value="<?=$roleData['role_name']?>" />
+                </td>
+            </tr>
+            <tr>
+                <td class="label">权限列表：</td>
+                <td>
+                    <?php foreach($priData as $k => $v){
+                        if(in_array($v['id'],$priIds))
+                            $chk = 'checked="checked"';
+                        else
+                            $chk = '';
+                    ?>
+                        <?=str_repeat('-',8*$v['level']);?>
+                        <input level_id="<?=$v['level']?>" type="checkbox" <?=$chk?> name="pri_id[]" value="<?=$v['id']?>">
+                        <?=$v['pri_name']?><br>
+                    <?php }?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="99" align="center">
+                    <input type="submit" class="button" value=" 确定 " />
+                    <input type="reset" class="button" value=" 重置 " />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script>
+    $(':checkbox').click(function(){
+        if($(this).prop('checked')){
+            var cur_level = level = $(this).attr('level_id');
+            //勾选上级分类
+            $(this).prevAll(':checkbox').each(function(k,v){
+                var level_temp = $(v).attr('level_id');
+                if(level_temp < cur_level){
+                    $(v).attr('checked',true);
+                    cur_level--;
+                }
+            });
+            //勾选子分类
+            $(this).nextAll(':checkbox').each(function(k,v){
+                var level_temp = $(v).attr('level_id');
+                if(level_temp > level){
+                    $(v).attr('checked',true);
+                }else{
+                    return false;
+                }
+            });
+        }else{
+            var level = $(this).attr('level_id');
+            //取消勾选子分类
+            $(this).nextAll(':checkbox').each(function(k,v){
+                var level_temp = $(v).attr('level_id');
+                if(level_temp > level){
+                    $(v).attr('checked',false);
+                }else{
+                    return false;
+                }
+            });
+        }
+    });
+</script>

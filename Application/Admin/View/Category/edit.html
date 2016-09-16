@@ -1,0 +1,46 @@
+<layout name="layout" />
+<div class="main-div">
+    <form name="main_form" method="POST" action="__SELF__">
+        <input type="hidden" value="<?=$data['id']?>" name="id">
+        <table cellspacing="1" cellpadding="3" width="100%">
+            <tr>
+                <td class="label">分类名称：</td>
+                <td>
+                    <input  type="text" name="cat_name" value="<?=$data['cat_name']?>" />
+                </td>
+            </tr>
+            <tr>
+                <td class="label">上级分类：</td>
+                <td>
+                    <select name="parent_id" id="parent_id">
+                        <option value="">请选择</option>
+                        <?php foreach($catdata as $v){
+                            //跳过当前分类和其子分类
+                            if($v['id'] == $data['id'] || in_array($v['id'],$children))
+                                continue;
+                            if($v['id'] == $data['parent_id'])
+                                $selected = 'selected="selected"';
+                            else
+                                $selected = '';
+                        ?>
+                        <option <?=$selected?> value="<?=$v['id']?>"><?=str_repeat('-',4*$v['level']),$v['cat_name']?></option>
+                        <?php }?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">是否推荐楼层：</td>
+                <td>
+                    <input type="radio" name="is_floor" value="是" <?php if($data['is_floor'] == '是') echo 'checked="checked"';?>/> 是
+                    <input type="radio" name="is_floor" value="否" <?php if($data['is_floor'] == '否') echo 'checked="checked"';?>/> 否
+                </td>
+            </tr>
+            <tr>
+                <td colspan="99" align="center">
+                    <input type="submit" class="button" value=" 确定 " />
+                    <input type="reset" class="button" value=" 重置 " />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

@@ -1,0 +1,76 @@
+<layout name="layout" />
+
+<form action="__SELF__" method="post" name="form1">
+<!-- 列表 -->
+<div class="list-div" id="listDiv">
+	<table cellpadding="3" cellspacing="1">
+		<tr>
+		<?php 
+		$attrCount = count($_gaData);
+		foreach($_gaData as $k => $v){?>
+    		<th><?=$k?></th>
+    	<?php }?>
+    		<th>库存量</th>
+    		<th>操作</th>
+    	</tr>
+    	<?php if($gnData){?>
+	    	<?php foreach($gnData as $k2 => $v2){?>
+	    	<tr>
+	    		<?php foreach($_gaData as $k => $v){?>
+	    			<td>
+		    			<select name="goods_attr_id[]" id=""><option value="">请选择</option>
+		    			<?php foreach($v as $k1 => $v1){
+							if(strstr($v2['goods_attr_id'],$v1['id']))
+								$selected = 'selected="selected"';
+							else
+								$selected = '';
+		    			?>
+		    				<option <?=$selected?> value="<?=$v1['id']?>"><?=$v1['attr_value']?></option>
+		    			<?php }?>
+		    			</select>
+	    			</td>
+	    		<?php }?>
+	    		<td><input type="text" name="goods_number[]" value="<?=$v2['goods_number']?>"></td>
+	    		<td><input type="button" onclick="addNewTr(this)" value="<?php echo $k2 == 0 ? '+' : '-'?>"></td>
+	    	</tr>
+	    	<?php }?>
+    	<?php }else{ ?>
+    		<tr>
+    		<?php foreach($_gaData as $k => $v){?>
+    			<td>
+	    			<select name="goods_attr_id[]" id=""><option value="">请选择</option>
+	    			<?php foreach($v as $k1 => $v1){?>
+	    				<option value="<?=$v1['id']?>"><?=$v1['attr_value']?></option>
+	    			<?php }?>
+	    			</select>
+    			</td>
+    		<?php }?>
+    		<td><input type="text" name="goods_number[]" value=""></td>
+    		<td><input type="button" onclick="addNewTr(this)" value="+"></td>
+    		</tr>
+    	<?php }?>
+    	<tr>
+    		<td colspan="<?=$attrCount+2?>" align="center">
+    			<input type="submit" value="提交">
+    		</td>
+    	</tr>
+	</table>
+</div>
+</form>
+
+<script>
+	function addNewTr(obj){
+		var tr = $(obj).parent().parent();
+
+		if($(obj).val() == '+'){
+			var newTr = tr.clone();
+			newTr.find(':button').val('-');
+			$("form[name='form1'] :submit").parent().parent().before(newTr);
+		}else{
+			tr.remove();
+		}
+		
+	}
+</script>
+
+<script src="__PUBLIC__/Admin/Js/tron.js"></script>
