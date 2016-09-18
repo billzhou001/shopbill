@@ -48,6 +48,10 @@ class OrderModel extends Model
 			$this->error = '请选择商品！';
 			return false;
 		}
+		//增加一个全局锁
+		$this->fp = fopen('lock.txt');
+		flock($this->fp, LOCK_EX);
+
 		$gnModel = M('goods_number');
 		//计算总价
 		$total = '';
@@ -85,6 +89,10 @@ class OrderModel extends Model
 				'goods_attr_id' => array('eq',$v['goods_attr_id']),
 			))->setDec('goods_number',$v['goods_number']);
 		}
+
+		flock($this->fp, LOCK_UN);
+		fclose($this->fp);
+
 		//清空购物车
 		$cartModel = D('Home/cart');
 		$cartModel->clear();
