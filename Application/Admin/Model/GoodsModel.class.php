@@ -360,11 +360,13 @@ class GoodsModel extends Model{
 		foreach($attr_values as $k => $v){
 			$v = array_unique($v);
 			foreach($v as $k1 => $v1){
-				$goodsattrmodel->add(array(
-					'goods_id' => $data['id'],
-					'attr_id' => $k,
-					'attr_value' => $v1
-				));
+				if($v1 != ''){
+					$goodsattrmodel->add(array(
+						'goods_id' => $data['id'],
+						'attr_id' => $k,
+						'attr_value' => $v1
+					));
+				}
 			}
 		}
 		
