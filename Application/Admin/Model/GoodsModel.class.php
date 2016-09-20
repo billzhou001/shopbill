@@ -249,9 +249,6 @@ class GoodsModel extends Model{
 			}
 		}		
 		
-		//或者可以用replace into
-
-
 		// 过滤这个goods_desc字段
 		$data['goods_desc'] = removeXSS($_POST['goods_desc']);
 	}
@@ -324,8 +321,7 @@ class GoodsModel extends Model{
 						array(350, 350),
 						array(50, 50),
 					));
-					if($ret['ok'] == 1)
-					{
+					if($ret['ok'] == 1){
 						$gpmodel->add(array(
 							'pic' => $ret['images'][0],
 							'big_pic' => $ret['images'][1],
