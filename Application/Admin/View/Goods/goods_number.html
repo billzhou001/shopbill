@@ -65,6 +65,8 @@
 		if($(obj).val() == '+'){
 			var newTr = tr.clone();
 			newTr.find(':button').val('-');
+			newTr.find('option:selected').removeAttr('selected');
+			newTr.find('input[name="goods_number[]"]').val('');
 			$("form[name='form1'] :submit").parent().parent().before(newTr);
 		}else{
 			tr.remove();
