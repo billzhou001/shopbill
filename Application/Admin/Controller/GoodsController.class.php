@@ -15,10 +15,24 @@ class GoodsController extends BaseController {
         ))
        ->select();
 
-        //二维数组转三维数组，将所有属性值以属性名为下标分类
+        //二维数组转三维数组
         $_gaData = array();
         foreach($goodsattrdata as $k => $v){
-            $_gaData[$v['attr_name']][] = $v;
+            $_gaData[$v['attr_name']][] = $v; //以属性名为下标对商品属性数据分类
+            $_gaDataLst[$v['attr_name']][] = $v['attr_value']; //以属性名为下标对商品属性值标分类
+        }
+
+        //计算每组商品属性值，并放入一个数组中
+        $arr1 = array();
+        $res = array_shift($_gaDataLst);
+        while ($arr2 = array_shift($_gaDataLst)) {
+            $arr1 = $res;
+            $res = array();
+            foreach ($arr1 as $k => $v) {
+                foreach ($arr2 as $k1 => $v1) {
+                    $res[] = $v.','.$v1;
+                }
+            }
         }
 
         $gnModel = D('goods_number');
@@ -59,6 +73,7 @@ class GoodsController extends BaseController {
         $this->assign(array(
             '_gaData' => $_gaData,
             'gnData' => $gnData,
+            'res' => $res,
             '_page_title' => '库存量',
             '_page_btn_name' => '商品列表',
             '_page_btn_link' => U('lst'),

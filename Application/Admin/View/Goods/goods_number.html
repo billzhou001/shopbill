@@ -35,19 +35,33 @@
 	    	</tr>
 	    	<?php }?>
     	<?php }else{ ?>
-    		<tr>
-    		<?php foreach($_gaData as $k => $v){?>
-    			<td>
-	    			<select name="goods_attr_id[]" id=""><option value="">请选择</option>
-	    			<?php foreach($v as $k1 => $v1){?>
-	    				<option value="<?=$v1['id']?>"><?=$v1['attr_value']?></option>
-	    			<?php }?>
-	    			</select>
-    			</td>
-    		<?php }?>
-    		<td><input type="text" name="goods_number[]" value=""></td>
-    		<td><input type="button" onclick="addNewTr(this)" value="+"></td>
-    		</tr>
+	    	<?php 
+				//计算tr行数
+				$total = 1;
+				foreach($_gaData as $k=>$v){
+					$total = $total*count($v);
+				}
+				for($i=0;$i<$total;$i++){
+	    	?>
+	    		<tr>
+	    		<?php foreach($_gaData as $k => $v){?>
+	    			<td>
+		    			<select name="goods_attr_id[]" id=""><option value="">请选择</option>
+		    			<?php foreach($v as $k1 => $v1){
+							if(strstr($res[$i],$v1['attr_value']))
+								$select = 'selected="selected"';
+							else
+								$select = '';
+		    			?><!--该属性下的属性值-->
+		    				<option <?=$select?> value="<?=$v1['id']?>"><?=$v1['attr_value']?></option>
+		    			<?php }?>
+		    			</select>
+	    			</td>
+	    		<?php }?>
+	    		<td><input type="text" name="goods_number[]" value=""></td>
+	    		<td><input type="button" onclick="addNewTr(this)" value="+"></td>
+	    		</tr>
+	    	<?php }?>
     	<?php }?>
     	<tr>
     		<td colspan="<?=$attrCount+2?>" align="center">
